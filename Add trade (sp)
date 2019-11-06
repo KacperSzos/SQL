@@ -1,0 +1,63 @@
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+-- ===================================================================================================================
+-- Author:          Kacper Szostakow
+-- Create date:     2019-11-05
+-- Description:     Adds a new trade to trades and recalculate num_shares in positions.
+--                  All the fields in trades are input parameters.
+-- ===================================================================================================================
+
+CREATE PROCEDURE dbo.spadd_trade
+(
+		@id                         VARCHAR(10),
+        @trade_date                 DATE = NULL,
+        @trader_initials            VARCHAR(5),
+        @ticker                     VARCHAR(10),
+        @price                      FLOAT,
+        @trade_type                 VARCHAR(1),
+        @traded_portfolio_id        VARCHAR(10) = 'quant',
+        @traded_strategy_id         VARCHAR(10),
+        @trade_time                 DATETIME = NULL,
+        @traded_num_shares          INT,
+        @trade_commission           INT
+
+	)
+	AS
+    BEGIN
+
+        SET NOCOUNT ON;
+
+       INSERT INTO dbo.trades
+            (
+              ID                      ,
+              trade_date              ,
+              trader_initials         ,
+              ticker                  ,
+              price                   ,
+              trade_type              ,
+              traded_portfolio_id     ,
+              traded_strategy_id      ,
+              trade_time              ,
+              traded_num_shares       ,
+              trade_commission
+            )
+            VALUES
+            (
+              @id,
+              @trade_date,
+              @trader_initials,
+              @ticker,
+              @price,
+              @trade_type,
+              @traded_portfolio_id,
+              @traded_strategy_id,
+              @trade_time,
+              @traded_num_shares,
+              @trade_commission
+            )
+
+    END
+GO
