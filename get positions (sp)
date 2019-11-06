@@ -1,0 +1,30 @@
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+-- ===================================================================================================================
+-- Author:          Kacper Szostakow
+-- Create date:     2019-11-05
+-- Description:     It takes as input parameters a portfolio_id and optionally a strategy_id. The procedure calculates
+--                  the sum(num_shares) group by ticker, then delete all tickers with a zero num_shares.
+-- ===================================================================================================================
+
+CREATE PROCEDURE dbo.spget_positions
+(
+		@portfolio_id 	varchar(10)  =  'quant',
+		@strategy_id	varchar(10)
+	)
+	AS
+    BEGIN
+
+        SET NOCOUNT ON;
+
+        SELECT trades.ticker, SUM(trades.traded_num_shares) AS 'number of shares traded'
+        FROM trades
+        WHERE trades.traded_portfolio_id = @portfolio_id
+        AND trades.traded_strategy_id = @strategy_id
+        GROUP BY trades.ticker;
+
+    END
+GO
